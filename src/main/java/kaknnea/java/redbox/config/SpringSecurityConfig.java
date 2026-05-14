@@ -33,7 +33,9 @@ public class SpringSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         (authorize) -> {
-                            authorize.requestMatchers("/api/roles/**").permitAll();
+//                            authorize.requestMatchers("/api/roles/**").permitAll();
+                            authorize.requestMatchers("/api/auth/**").permitAll();
+//
                             authorize.anyRequest().authenticated();
 
                         }
