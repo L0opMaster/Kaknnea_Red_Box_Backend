@@ -1,0 +1,5 @@
+DB_URL=localhost
+DB_NAME=kaknnea_red_box
+DB_USERNAME=root
+DB_PASSWORD=mypassword
+DB_PORT=3306
