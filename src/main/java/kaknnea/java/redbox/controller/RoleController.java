@@ -6,6 +6,7 @@ import kaknnea.java.redbox.dto.RoleDtoResponse;
 import kaknnea.java.redbox.service.RoleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,13 +21,14 @@ public class RoleController {
         this.roleService = roleService;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping()
     public ResponseEntity<RoleDtoResponse> addRole(@Valid @RequestBody RoleDtoRequest roleDtoRequest){
         RoleDtoResponse response = roleService.addRole(roleDtoRequest);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<RoleDtoResponse> getRoleById(@PathVariable Long id){
         RoleDtoResponse response = roleService.getRoleById(id);
@@ -34,13 +36,14 @@ public class RoleController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<RoleDtoResponse>> getAllRoles(){
         List<RoleDtoResponse> response = roleService.getAllRole();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<RoleDtoResponse> updateRole(Long id, RoleDtoRequest request){
         RoleDtoResponse response = roleService.updateRole(id, request);
@@ -48,6 +51,7 @@ public class RoleController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deletedRoleById(Long id){
         roleService.deletedRole(id);
 
