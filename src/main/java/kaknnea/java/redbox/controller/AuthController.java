@@ -1,5 +1,6 @@
 package kaknnea.java.redbox.controller;
 
+import kaknnea.java.redbox.dto.LoginDtoRequest;
 import kaknnea.java.redbox.dto.RegisterDto;
 import kaknnea.java.redbox.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -24,5 +25,11 @@ public class AuthController {
         String registerDto1 = authService.register(registerDto);
 
         return new ResponseEntity<>(registerDto1, HttpStatus.CREATED);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginDtoRequest loginDtoRequest){
+        String response = authService.login(loginDtoRequest);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

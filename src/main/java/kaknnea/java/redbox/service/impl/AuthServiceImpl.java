@@ -1,5 +1,6 @@
 package kaknnea.java.redbox.service.impl;
 
+import kaknnea.java.redbox.dto.LoginDtoRequest;
 import kaknnea.java.redbox.dto.RegisterDto;
 import kaknnea.java.redbox.entity.Role;
 import kaknnea.java.redbox.entity.User;
@@ -9,6 +10,10 @@ import kaknnea.java.redbox.repositoty.UserRepository;
 import kaknnea.java.redbox.service.AuthService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +21,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class RegisterServiceImpl implements AuthService {
+public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public RegisterServiceImpl(UserRepository userRepository, ModelMapper modelMapper,
-                               PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public AuthServiceImpl(UserRepository userRepository, ModelMapper modelMapper,
+                           PasswordEncoder passwordEncoder, RoleRepository roleRepository, AuthenticationManager authenticationManager) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.authenticationManager = authenticationManager;
     }
 
     @Override
@@ -60,5 +67,17 @@ public class RegisterServiceImpl implements AuthService {
         user.setRoles(roles);
         userRepository.save(user);
         return "User Registered Successfully";
+    }
+
+    @Override
+    public String login(LoginDtoRequest loginDtoRequest) {
+
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginDtoRequest.getUsernameOrEmail(),
+                loginDtoRequest.getPassword()
+        ));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return "Login SuccessFully";
     }
 }
