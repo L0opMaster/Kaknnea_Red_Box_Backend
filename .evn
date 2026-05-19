@@ -1,5 +1,5 @@
 DB_URL=localhost
-DB_NAME=kaknnea_red_box
+DB_NAME=redBox_app
 DB_USERNAME=root
 DB_PASSWORD=mypassword
 DB_PORT=3306

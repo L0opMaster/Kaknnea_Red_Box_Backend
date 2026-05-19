@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -48,6 +49,9 @@ public class User {
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
+    @OneToMany(mappedBy = "user")
+    private List<Product> products;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -76,12 +80,20 @@ public class User {
         updatedAt = LocalDateTime.now();
     }
 
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
     @PreUpdate
     public void onUpdate(){updatedAt = LocalDateTime.now();}
 
     public User(
             Long id, LocalDateTime updatedAt, LocalDateTime createdAt, String password, boolean isActive,
-            String email, String username, LocalDate dateOfBirth, String lastName, String firstName
+            String email, String username, LocalDate dateOfBirth, String lastName, String firstName, List<Product> products
     ) {
         this.id = id;
         this.updatedAt = updatedAt;
@@ -93,6 +105,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.lastName = lastName;
         this.firstName = firstName;
+        this.products = products;
     }
 
     public User(){}

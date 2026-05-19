@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "categories")
@@ -23,6 +24,9 @@ public class Categories {
 
     private boolean active;
 
+    @OneToMany(mappedBy = "category")
+    private List<Product> products;
+
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
@@ -30,24 +34,15 @@ public class Categories {
     private LocalDateTime createdAt;
 
     public Categories(){};
-    public Categories(Long id, String khmerName, String englishName, boolean active, LocalDateTime updatedAt, LocalDateTime createdAt) {
+
+    public Categories(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, List<Product> products, boolean active, String englishName, String khmerName) {
         this.id = id;
-        this.khmerName = khmerName;
-        this.englishName = englishName;
-        this.active = active;
-        this.updatedAt = updatedAt;
         this.createdAt = createdAt;
-    }
-
-    @PrePersist
-    public void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void onUpdate() {
-        updatedAt = LocalDateTime.now();
+        this.updatedAt = updatedAt;
+        this.products = products;
+        this.active = active;
+        this.englishName = englishName;
+        this.khmerName = khmerName;
     }
 
     public Long getId() {
@@ -72,6 +67,14 @@ public class Categories {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     public boolean isActive() {
