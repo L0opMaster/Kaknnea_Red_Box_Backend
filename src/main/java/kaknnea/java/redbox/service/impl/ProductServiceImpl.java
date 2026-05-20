@@ -6,6 +6,7 @@ import kaknnea.java.redbox.entity.Categories;
 import kaknnea.java.redbox.entity.Product;
 import kaknnea.java.redbox.entity.User;
 import kaknnea.java.redbox.exception.APIException;
+import kaknnea.java.redbox.mapper.ProductModelMapper;
 import kaknnea.java.redbox.repositoty.CategoryRepository;
 import kaknnea.java.redbox.repositoty.ProductRepository;
 import kaknnea.java.redbox.repositoty.UserRepository;
@@ -16,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -103,27 +105,34 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new APIException(HttpStatus.BAD_REQUEST, "User not found"));
 
         List<Product> products = productRepository.findByUserId(user.getId());
-        return products.stream().map(
-                product -> {
-                    ProductDtoResponse response = new ProductDtoResponse();
-                    response.setId(product.getId());
-                    response.setProductCode(product.getProductCode());
-                    response.setKhmerName(product.getKhmerName());
-                    response.setEnglishName(product.getEnglishName());
-                    response.setDescription(product.getDescription());
-                    response.setActive(product.isActive());
-                    response.setImageUrl(product.getImageUrl());
-                    response.setPrice(product.getPrice());
+//        return products.stream().map(
+//                product -> {
+//                    ProductDtoResponse response = new ProductDtoResponse();
+//                    response.setId(product.getId());
+//                    response.setProductCode(product.getProductCode());
+//                    response.setKhmerName(product.getKhmerName());
+//                    response.setEnglishName(product.getEnglishName());
+//                    response.setDescription(product.getDescription());
+//                    response.setActive(product.isActive());
+//                    response.setImageUrl(product.getImageUrl());
+//                    response.setPrice(product.getPrice());
+//
+//                    response.setCategory(product.getCategory().getId());
+//                    response.setUser(product.getUser().getId());
+//
+//                    response.setCreatedAt(product.getCreatedAt());
+//                    response.setUpdatedAt(product.getUpdatedAt());
+//
+//                    return response;
+//                }
+//        ).collect(Collectors.toList());
 
-                    response.setCategory(product.getCategory().getId());
-                    response.setUser(product.getUser().getId());
-
-                    response.setCreatedAt(product.getCreatedAt());
-                    response.setUpdatedAt(product.getUpdatedAt());
-
-                    return response;
-                }
-        ).collect(Collectors.toList());
+        List<ProductDtoResponse> list = new ArrayList<>();
+        for (Product product : products) {
+            ProductDtoResponse response = ProductModelMapper.mapToProductResponse(product);
+            list.add(response);
+        }
+        return list;
     }
 
     @Override
