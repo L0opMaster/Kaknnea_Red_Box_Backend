@@ -24,7 +24,7 @@ public class Categories {
 
     private boolean active;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
     @Column(name = "updated_at")
@@ -34,6 +34,16 @@ public class Categories {
     private LocalDateTime createdAt;
 
     public Categories(){};
+
+    @PrePersist
+    public void onCreate(){
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    public void onUpdate(){
+        updatedAt = LocalDateTime.now();
+    }
 
     public Categories(Long id, LocalDateTime createdAt, LocalDateTime updatedAt, List<Product> products, boolean active, String englishName, String khmerName) {
         this.id = id;

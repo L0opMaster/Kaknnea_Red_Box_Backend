@@ -7,6 +7,7 @@ import kaknnea.java.redbox.entity.User;
 import kaknnea.java.redbox.exception.APIException;
 import kaknnea.java.redbox.repositoty.RoleRepository;
 import kaknnea.java.redbox.repositoty.UserRepository;
+import kaknnea.java.redbox.security.JwtTokenProvider;
 import kaknnea.java.redbox.service.AuthService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -28,14 +29,17 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public AuthServiceImpl(UserRepository userRepository, ModelMapper modelMapper,
-                           PasswordEncoder passwordEncoder, RoleRepository roleRepository, AuthenticationManager authenticationManager) {
+                           PasswordEncoder passwordEncoder, RoleRepository roleRepository,
+                           AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Override
@@ -72,12 +76,15 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String login(LoginDtoRequest loginDtoRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDtoRequest.getUsernameOrEmail(),
-                loginDtoRequest.getPassword()
+        Authentication authentication = authenticationManager
+                .authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                            loginDtoRequest.getUsernameOrEmail(),
+                            loginDtoRequest.getPassword()
         ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return "Login SuccessFully";
+        String token = jwtTokenProvider.generateToken(authentication);
+        return token;
     }
 }

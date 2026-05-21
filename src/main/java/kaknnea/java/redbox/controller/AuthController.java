@@ -1,5 +1,6 @@
 package kaknnea.java.redbox.controller;
 
+import kaknnea.java.redbox.dto.JwtAuthResponse;
 import kaknnea.java.redbox.dto.LoginDtoRequest;
 import kaknnea.java.redbox.dto.RegisterDto;
 import kaknnea.java.redbox.service.AuthService;
@@ -27,9 +28,13 @@ public class AuthController {
         return new ResponseEntity<>(registerDto1, HttpStatus.CREATED);
     }
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDtoRequest loginDtoRequest){
-        String response = authService.login(loginDtoRequest);
+    public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDtoRequest loginDtoRequest){
+        String token = authService.login(loginDtoRequest);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
+
+        jwtAuthResponse.setAccessToken(token);
+
+        return new ResponseEntity<>(jwtAuthResponse, HttpStatus.OK);
     }
 }

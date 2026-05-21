@@ -42,7 +42,7 @@ public class Product {
     @Column(nullable = false, precision = 18, scale = 2, unique = false)
     private BigDecimal price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id", nullable = false)
     private Categories category;
 

@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public class CategoryDtoRequest {
 
-    private Long id;
     @NotBlank(message = "khmer_name is required")
     private String khmerName;
     @NotBlank(message = "english_name is required")
@@ -13,20 +12,10 @@ public class CategoryDtoRequest {
 
 
     public CategoryDtoRequest(){}
-    public CategoryDtoRequest(Long id, String khmerName, String englishName) {
-        this.id = id;
+    public CategoryDtoRequest(String khmerName, String englishName) {
         this.khmerName = khmerName;
         this.englishName = englishName;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getKhmerName() {
         return khmerName;
     }
