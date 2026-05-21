@@ -1,7 +1,5 @@
 package kaknnea.java.redbox.dto;
 
-import kaknnea.java.redbox.entity.Categories;
-import kaknnea.java.redbox.entity.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,7 +11,7 @@ public class ProductDtoResponse {
     private String khmerName;
     private String englishName;
     private String description;
-    private boolean isActive;
+    private Boolean isActive;
     private String imageUrl;
     private BigDecimal price;
     private Long category;
@@ -21,7 +19,7 @@ public class ProductDtoResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public ProductDtoResponse(Long id, String productCode, String khmerName, String englishName, String description, boolean isActive, String imageUrl, BigDecimal price, Long category, Long user, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ProductDtoResponse(Long id, String productCode, String khmerName, String englishName, String description, Boolean isActive, String imageUrl, BigDecimal price, Long category, Long user, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.productCode = productCode;
         this.khmerName = khmerName;
@@ -62,18 +60,6 @@ public class ProductDtoResponse {
         this.createdAt = createdAt;
     }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
     public Long getUser() {
         return user;
     }
@@ -90,15 +76,27 @@ public class ProductDtoResponse {
         this.category = category;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isActive() {
+    public Boolean getActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         isActive = active;
     }
 

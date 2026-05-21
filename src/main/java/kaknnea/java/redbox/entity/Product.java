@@ -3,6 +3,7 @@ package kaknnea.java.redbox.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,7 +32,7 @@ public class Product {
     private String description;
 
     @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    private Boolean isActive;
 
     @NotBlank(message = "image_url is required")
     @Column(name = "image_url", nullable = false, length = 500, unique = false)
@@ -68,7 +69,21 @@ public class Product {
         updatedAt = LocalDateTime.now();
     }
 
-    // GETTER & SETTER
+    public Product(Long id, String productCode, String khmerName, String englishName, String description, Boolean isActive, String imageUrl, BigDecimal price, Categories category, User user, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.productCode = productCode;
+        this.khmerName = khmerName;
+        this.englishName = englishName;
+        this.description = description;
+        this.isActive = isActive;
+        this.imageUrl = imageUrl;
+        this.price = price;
+        this.category = category;
+        this.user = user;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+// GETTER & SETTER
 
 
     public Long getId() {
@@ -127,11 +142,11 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isActive() {
+    public Boolean getActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(Boolean active) {
         isActive = active;
     }
 

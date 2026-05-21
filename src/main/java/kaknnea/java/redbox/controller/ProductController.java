@@ -4,6 +4,10 @@ import jakarta.validation.Valid;
 import kaknnea.java.redbox.dto.ProductDtoRequest;
 import kaknnea.java.redbox.dto.ProductDtoResponse;
 import kaknnea.java.redbox.service.ProductService;
+import org.hibernate.sql.ast.tree.predicate.BooleanExpressionPredicate;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +26,43 @@ public class ProductController {
     }
 
 
+    @GetMapping("/search")
+    public Page<ProductDtoResponse> search(
+            @RequestParam(defaultValue = "") String q,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Boolean active,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return productService.search(
+                q,
+                categoryId,
+                active,
+                pageable
+        );
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @GetMapping("/my-product")
+    public Page<ProductDtoResponse> searchMyProduct(
+            @RequestParam(defaultValue = "") String q,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Boolean active,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+            ){
+        Pageable pageable = PageRequest.of(page, size);
+
+        return productService.searchMyProduct(
+                q,
+                categoryId,
+                active,
+                pageable
+        );
+    }
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping
     public ResponseEntity<String> createProduct(@Valid @RequestBody ProductDtoRequest request) {

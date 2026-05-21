@@ -13,7 +13,7 @@ public class ProductModelMapper {
         response.setProductCode(product.getProductCode());
         response.setEnglishName(product.getEnglishName());
         response.setKhmerName(product.getKhmerName());
-        response.setActive(product.isActive());
+        response.setActive(product.getActive());
         response.setUser(product.getUser().getId());
         response.setCategory(product.getCategory().getId());
         response.setImageUrl(response.getImageUrl());

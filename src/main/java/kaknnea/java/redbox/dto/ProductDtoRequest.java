@@ -19,7 +19,7 @@ public class ProductDtoRequest {
     @NotBlank(message = "image_url is required")
     private String imageUrl;
 
-    private boolean isActive;
+    private Boolean isActive;
 
     @NotNull(message = "price is required")
     private BigDecimal price;
@@ -30,7 +30,7 @@ public class ProductDtoRequest {
     public ProductDtoRequest() {
     }
 
-    public ProductDtoRequest(String khmerName, Long categoryId, BigDecimal price, String imageUrl, String description, String englishName, boolean isActive) {
+    public ProductDtoRequest(String khmerName, Long categoryId, BigDecimal price, String imageUrl, String description, String englishName, Boolean isActive) {
         this.khmerName = khmerName;
         this.categoryId = categoryId;
         this.price = price;
@@ -38,14 +38,6 @@ public class ProductDtoRequest {
         this.imageUrl = imageUrl;
         this.description = description;
         this.englishName = englishName;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
     }
 
     public String getKhmerName() {
@@ -56,28 +48,12 @@ public class ProductDtoRequest {
         this.khmerName = khmerName;
     }
 
-    public String getEnglishName() {
-        return englishName;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public void setEnglishName(String englishName) {
-        this.englishName = englishName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
 
     public BigDecimal getPrice() {
@@ -88,12 +64,35 @@ public class ProductDtoRequest {
         this.price = price;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Boolean getActive() {
+        return isActive;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getEnglishName() {
+        return englishName;
+    }
+
+    public void setEnglishName(String englishName) {
+        this.englishName = englishName;
+    }
 }

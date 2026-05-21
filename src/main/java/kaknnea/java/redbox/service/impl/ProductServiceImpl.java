@@ -12,6 +12,8 @@ import kaknnea.java.redbox.repositoty.ProductRepository;
 import kaknnea.java.redbox.repositoty.UserRepository;
 import kaknnea.java.redbox.service.ProductService;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
         product.setProductCode(productCode);
         product.setKhmerName(request.getKhmerName());
         product.setEnglishName(request.getEnglishName());
-        product.setActive(request.isActive());
+        product.setActive(request.getActive());
         product.setImageUrl(request.getImageUrl());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
@@ -79,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
             response.setDescription(product.getDescription());
             response.setPrice(product.getPrice());
             response.setImageUrl(product.getImageUrl());
-            response.setActive(product.isActive());
+            response.setActive(product.getActive());
 
 
             // categoryId
@@ -163,7 +165,7 @@ public class ProductServiceImpl implements ProductService {
         product.setEnglishName(request.getEnglishName());
         product.setDescription(request.getDescription());
         product.setImageUrl(request.getImageUrl());
-        product.setActive(request.isActive());
+        product.setActive(request.getActive());
         product.setPrice(request.getPrice());
         product.setCategory(categories);
 
@@ -177,7 +179,7 @@ public class ProductServiceImpl implements ProductService {
         response.setEnglishName(updatedProduct.getEnglishName());
         response.setDescription(updatedProduct.getDescription());
         response.setImageUrl(updatedProduct.getImageUrl());
-        response.setActive(updatedProduct.isActive());
+        response.setActive(updatedProduct.getActive());
         response.setPrice(updatedProduct.getPrice());
         response.setCategory(updatedProduct.getCategory().getId());
         response.setUser(updatedProduct.getUser().getId());
@@ -201,5 +203,40 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(product.getId());
 
         return "Deleted Successfully";
+    }
+
+    @Override
+    public Page<ProductDtoResponse> search(
+            String q,
+            Long categoryId,
+            Boolean active,
+            Pageable pageable
+    ) {
+        Page<Product> products = productRepository.search(
+                q, categoryId, active, pageable
+        );
+        return products.map(product -> ProductModelMapper.mapToProductResponse(product));
+    }
+
+    @Override
+    public Page<ProductDtoResponse> searchMyProduct(
+            String q,
+            Long categoryId,
+            Boolean active,
+            Pageable pageable
+    ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication != null ? authentication.getName() : null;
+
+        User user = userRepository.findByUsernameOrEmail(username, username)
+                .orElseThrow(() -> new APIException(HttpStatus.FORBIDDEN, "You are not allow"));
+        Page<Product> products = productRepository.searchMyProducts(
+                user.getId(),
+                q,
+                categoryId,
+                active,
+                pageable
+        );
+        return products.map(ProductModelMapper::mapToProductResponse);
     }
 }
